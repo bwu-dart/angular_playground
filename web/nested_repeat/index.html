@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+  </head>
+  <body ng-cloak>
+    <div some-fruits>
+      <div ng-repeat="row in ctrl.elements ">
+      {{row}}
+        <div ng-repeat="column in row">
+          <span>outer: x{{$parent}}x x{{$parent.$index}}x inner: x{{$index}}x column: x{{column}}x</span>
+        </div>
+
+      </div>
+    </div>
+    <script src="packages/shadow_dom/shadow_dom.min.js"></script>
+    <script type="application/dart" src="index.dart"></script>
+    <script type="text/javascript" src="packages/browser/dart.js"></script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <script src="packages/shadow_dom/shadow_dom.debug.js"></script>
+
+  </head>
+  <body ng-cloak some-ctrl>
+    {{ctrl.graphWidth}} - {{ ctrl.data }}
+    <loading done="ctrl.dataLoaded" error="ctrl.dataError">
+      <graph
+          width="ctrl.graphWidth"
+          data="ctrl.data">
+      </graph>
+    </loading>
+
+    <script type="application/dart" src="index.dart"></script>
+    <script type="text/javascript" src="packages/browser/dart.js"></script>
+
+  </body>
+</html>
