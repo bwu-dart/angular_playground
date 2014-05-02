@@ -5,10 +5,12 @@ dependencies:
   angular: '>=0.9.10'
 
 #    git: git@github.com:angular/angular.dart.git
-  shadow_dom: any
+  web_components: any
 
 transformers:
-- angular:
-    template_uri_rewrites:
-      packages/: /packages/
+#- angular:
+#  template_uri_rewrites:
+#    packages/: /packages/
+
+  - $dart2js: {'minify': true}
 
