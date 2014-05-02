@@ -5,16 +5,6 @@ import 'dart:html' as dom;
 import 'package:angular/angular.dart' as ng;
 import 'package:angular/application_factory.dart' as ngaf;
 
-@ng.Controller(
-    selector: 'input[type=text]',
-    publishAs: 'ctrl')
-class MyCtrl {
-  MyCtrl() {
-    print('MyCtrl created');
-  }
-  String value;
-}
-
 // see http://stackoverflow.com/questions/19329530
 // and this bug https://code.google.com/p/dart/issues/detail?id=18062
 // source from http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
@@ -24,17 +14,10 @@ class NgObserveSizeDirective implements ng.AttachAware, ng.DetachAware {
   dom.Element _element;
   bool _hasAttacheEvent;
 
-  NgObserveSizeDirective(this._element) {
-    print('NgObserveSizeDirective created');
-    _element.onResize.listen(onSizeChange2);
-  }
+  NgObserveSizeDirective(this._element);
 
-  void onSizeChange2(dom.Event e) {
-    print('onSizeChange2: $e');
-  }
-
-  void onSizeChange(/*dom.Event e*/) {
-    print('onSizeChange');
+  void onSizeChange(dom.Event e) {
+    _element.parent.scrollTop = _element.scrollHeight;
   }
 
   dom.HtmlElement _triggers;
@@ -49,10 +32,6 @@ class NgObserveSizeDirective implements ng.AttachAware, ng.DetachAware {
     expandChild.style.height = '${expand.offsetHeight + 1}px';
     expand.scrollLeft = expand.scrollWidth;
     expand.scrollTop = expand.scrollHeight;
-
-    print('ng contract - scrollLeft: ${contract.scrollLeft} scrollTop: ${contract.scrollTop}');
-    print('ng expandChild.style - width: ${expandChild.style.width} height: ${expandChild.style.height}');
-    print('ng expand - scrollLeft: ${expand.scrollLeft} scrollTop: ${expand.scrollTop}');
   }
 
   int _resizeLastWidth;
@@ -67,7 +46,6 @@ class NgObserveSizeDirective implements ng.AttachAware, ng.DetachAware {
 
 
   void scrollListener(dom.Event e) {
-    print('my_element2');
     resetTriggers();
     if(_resizeRaf != null) {
       dom.window.cancelAnimationFrame(_resizeRaf);
@@ -76,7 +54,7 @@ class NgObserveSizeDirective implements ng.AttachAware, ng.DetachAware {
       if(checkTriggers()) {
         _resizeLastWidth = _element.offsetWidth;
         _resizeLastHeight = _element.offsetHeight;
-        onSizeChange();
+        onSizeChange(e);
       }
     });
   }
@@ -110,11 +88,15 @@ class NgObserveSizeDirective implements ng.AttachAware, ng.DetachAware {
 class MyAppModule extends ng.Module {
   MyAppModule() {
     type(NgObserveSizeDirective);
-    type(MyCtrl);
   }
 }
 
 main() {
   print('main');
   ngaf.applicationFactory().addModule(new MyAppModule()).run();
+
+  new async.Timer.periodic(new Duration(seconds: 1), (t) {
+    var elt = (dom.querySelector('#my_sizable') as dom.HtmlElement);
+    elt.append(new dom.Element.html('<div>${new DateTime.now()}</div>'));
+  });
 }

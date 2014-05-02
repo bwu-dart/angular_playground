@@ -1,109 +1,7 @@
 <!DOCTYPE html>
 <html ng-app>
   <head>
-    <script src="packages/shadow_dom/shadow_dom.debug.js"></script>
-    <script>
-    (function(){
-
-    var attachEvent = document.attachEvent;
-
-    if (!attachEvent) {
-        var requestFrame = (function(){
-          var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                    function(fn){ return window.setTimeout(fn, 20); };
-          return function(fn){ return raf(fn); };
-        })();
-
-        var cancelFrame = (function(){
-          var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                       window.clearTimeout;
-          return function(id){ return cancel(id); };
-        })();
-
-        function resetTriggers(element){
-            var triggers = element.__resizeTriggers__,
-                expand = triggers.firstElementChild,
-                contract = triggers.lastElementChild,
-                expandChild = expand.firstElementChild;
-            contract.scrollLeft = contract.scrollWidth;
-            contract.scrollTop = contract.scrollHeight;
-            expandChild.style.width = expand.offsetWidth + 1 + 'px';
-            expandChild.style.height = expand.offsetHeight + 1 + 'px';
-            expand.scrollLeft = expand.scrollWidth;
-            expand.scrollTop = expand.scrollHeight;
-            console.log('contract - scrollLeft: ' + contract.scrollLeft + ' scrollTop: ' + contract.scrollTop);
-            console.log('expandChild.style - width: ' + expandChild.style.width + ' height: ' + expandChild.style.height);
-            console.log('expand - scrollLeft: ' + expand.scrollLeft + ' scrollTop: ' + expand.scrollTop);
-        };
-
-        function checkTriggers(element){
-          return element.offsetWidth != element.__resizeLast__.width ||
-                 element.offsetHeight != element.__resizeLast__.height;
-        }
-
-        function scrollListener(e){
-          console.log('scrollListener: my_element');
-            var element = this;
-            resetTriggers(this);
-            if (this.__resizeRAF__) cancelFrame(this.__resizeRAF__);
-            this.__resizeRAF__ = requestFrame(function(){
-                if (checkTriggers(element)) {
-                    element.__resizeLast__.width = element.offsetWidth;
-                    element.__resizeLast__.height = element.offsetHeight;
-                    element.__resizeListeners__.forEach(function(fn){
-                        fn.call(element, e);
-                    });
-                }
-            });
-        };
-    }
-
-    window.addResizeListener = function(element, fn){
-      console.log('addResizeListener');
-        if (attachEvent) element.attachEvent('resize', fn);
-        else {
-            if (!element.__resizeTriggers__) {
-                if (getComputedStyle(element).position == 'static') element.style.position = 'relative';
-                element.__resizeLast__ = {};
-                element.__resizeListeners__ = [];
-                element.__resizeTriggers__ = document.querySelector('.resize-triggers');
-                //(element.__resizeTriggers__ = document.createElement('div')).className = 'resize-triggers';
-                //element.__resizeTriggers__.innerHTML = '<div class="expand-trigger"><div></div></div>' +
-                                                       '<div class="contract-trigger"></div>';
-                //element.appendChild(element.__resizeTriggers__);
-                resetTriggers(element);
-                element.addEventListener('scroll', scrollListener, true);
-            }
-            element.__resizeListeners__.push(fn);
-        }
-    };
-
-    window.removeResizeListener = function(element, fn){
-        if (attachEvent) element.detachEvent('resize', fn);
-        else {
-            element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-            if (!element.__resizeListeners__.length) {
-                element.removeEventListener('scroll', scrollListener);
-                element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
-            }
-        }
-    }
-
-    })();
-
-    window.onload = function() {
-      //var myElement = document.getElementById('my_element');
-      var  myResizeFn = function(){
-            console.log('my_element');
-        };
-      //addResizeListener(document.getElementById('my_element2'), myResizeFn);
-      //addResizeListener(document.getElementById('my_element'), myResizeFn);
-      //addResizeListener(document.getElementById('list'), myResizeFn);
-
-      //removeResizeListener(myElement, myResizeFn);
-    };
-
-    </script>
+    <script src="packages/web_components/platform.js"></script>
     <style>
       .resize-triggers {
               visibility: hidden;
@@ -130,30 +28,19 @@
         height: 200%;
       }
     </style>
+    <style>
+      #my_element {
+        height: 200px;
+        overflow: scroll;
+      }
+    </style>
   </head>
   <body ng-cloak>
     <div>
-      <div id="my_element" style="border: 1px solid blue;"><div>bla</div></div>
-    </div>
-
-    <div>
-      <div id="my_element2" ng-observe-size style="border: 1px solid red;"><div>bla</div>
-        <!--<div class='resize-triggers'>
-          <div class='expand-trigger'><div></div></div>
-          <div class='contract-trigger'></div>
-        </div> -->
+      <div id="my_element"  style="border: 1px solid blue;">
+        <div id='my_sizable' ng-observe-size></div>
       </div>
     </div>
-
-    <section id="wrap">
-      <ul id="list">
-        <li>I'm an unordered list</li>
-        <li>I was last resized:</li>
-        <li id="resize_time">No resizing detected yet!</li>
-      </ul>
-    </section>
-
-    <input type="text" value="xxx" ng-model="ctrl.value">
 
     <script type="application/dart" src="index.dart"></script>
     <script type="text/javascript" src="packages/browser/dart.js"></script>
