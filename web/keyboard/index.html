@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <title>Online Keyboard</title>
+    <script src="packages/web_components/platform.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body ng-cloak ng-controller="text-ctrl">
+    <keyboard value="ctrl.text">
+      <textarea id="write" rows="6" cols="60" ng-model="ctrl.text"></textarea>
+    </keyboard>
+
+    <script type="application/dart" src="index.dart"></script>
+    <script type="text/javascript" src="packages/browser/dart.js"></script>
+  </body>
+</html>
