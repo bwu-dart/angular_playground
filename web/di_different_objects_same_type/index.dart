@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:di/di.dart';
 
-@NgController(
+@Controller(
     selector: '[ng-controller=alert-demo-ctrl]',
     publishAs: 'ctrl')
 class AlertDemoController {
@@ -18,7 +18,7 @@ class AlertDemoController {
   }
 }
 
-@NgController(
+@Controller(
     selector: '[ng-controller=accordion-demo-ctrl]',
     publishAs: 'ctrl')
 class AccordionDemoController {
@@ -32,7 +32,7 @@ class AccordionDemoController {
   }
 }
 
-@NgController(
+@Controller(
     selector: '[ng-controller=tabs-demo-ctrl]',
     publishAs: 'ctrl')
 class TabsDemoController {

@@ -8,14 +8,14 @@ class Item {
   Item(this.name);
 }
 
-@NgComponent(
+@Component(
     selector: 'my-component',
     publishAs: 'ctrl',
     applyAuthorStyles: true,
     template: '''<div ng-repeat="value in ctrl.values"><span>{{value.name}}</span> - <content><content></div>'''
 )
 
-class MyComponent implements NgAttachAware {
+class MyComponent implements AttachAware {
   List<Item> values = [new Item('1'), new Item('2'), new Item('3'), new Item('4')];
 
   String roomName = 'room 1';

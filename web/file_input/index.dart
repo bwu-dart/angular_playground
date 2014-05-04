@@ -4,7 +4,7 @@ import 'dart:html' as dom;
 import 'package:angular/angular.dart';
 import 'package:di/di.dart';
 
-@NgController(
+@Controller(
   selector: '[ng-controller=demo-ctrl]',
   publishAs: 'ctrl'
 )
@@ -18,7 +18,7 @@ class DemoCtrl {
   }
 }
 
-@NgDirective(selector: 'input[type=file][ng-model]')
+@Directive(selector: 'input[type=file][ng-model]')
 class InputFileDirective {
   dom.InputElement inputElement;
   NgModel ngModel;

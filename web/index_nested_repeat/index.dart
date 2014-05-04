@@ -3,7 +3,7 @@ library main;
 import 'package:angular/angular.dart';
 import 'package:di/di.dart';
 
-@NgController(
+@Controller(
   selector: '[ng-controller=demo-ctrl]',
   publishAs: 'ctrl'
 )
