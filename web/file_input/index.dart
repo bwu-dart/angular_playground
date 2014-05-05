@@ -2,6 +2,7 @@ library main;
 
 import 'dart:html' as dom;
 import 'package:angular/angular.dart';
+import 'package:angular/application_factory.dart';
 import 'package:di/di.dart';
 
 @Controller(
@@ -29,7 +30,7 @@ class InputFileDirective {
       inputElement.files = value;
     };
     inputElement.onChange.listen((value) {
-      scope.$apply(() => ngModel.viewValue = inputElement.files);
+      scope.apply(() => ngModel.viewValue = inputElement.files);
     });
   }
 }
@@ -45,6 +46,6 @@ class MyAppModule extends Module {
 Injector inj;
 
 void main() {
-  ngBootstrap(module: new MyAppModule());
+  applicationFactory().addModule(new MyAppModule()).run();
 }
 

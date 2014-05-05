@@ -1,6 +1,7 @@
 library main;
 
 import 'package:angular/angular.dart';
+import 'package:angular/application_factory.dart';
 import 'package:di/di.dart';
 
 class Item {
@@ -27,10 +28,10 @@ class MyComponent implements AttachAware {
 
   @override
   void attach() {
-    _scope.$on('roomCreated', (ScopeEvent e, details x) {
+    _scope.on('roomCreated').listen((ScopeEvent e) {
       print(e);
     });
-    _scope.$emit('roomCreated', ['${this.roomName}']);
+    _scope.emit('roomCreated', ['${this.roomName}']);
   }
 }
 
@@ -42,5 +43,5 @@ class MyAppModule extends Module {
 }
 
 void main() {
-  ngBootstrap(module: new MyAppModule());
+  applicationFactory().addModule(new MyAppModule()).run();
 }

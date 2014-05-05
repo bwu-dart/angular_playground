@@ -3,6 +3,7 @@ library main;
 import 'dart:html' as dom;
 import 'dart:async';
 import 'package:angular/angular.dart';
+import 'package:angular/application_factory.dart';
 import 'package:di/di.dart';
 
 import 'event_bus.dart';
@@ -71,7 +72,7 @@ class MyAppModule extends Module {
 Injector inj;
 
 void main() {
-  inj = ngBootstrap(module: new MyAppModule());
+  inj = applicationFactory().addModule(new MyAppModule()).run();
 
   EventBus eb = inj.get(EventBus);
 
